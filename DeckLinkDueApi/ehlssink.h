@@ -1,0 +1,95 @@
+//////////////////////////////////////////////////////////////////////////
+//
+//	Copyright (c) 2014 Elecard.
+//	All rights are reserved.  Reproduction in whole or in part is prohibited
+//	without the written consent of the copyright owner.
+//
+//	Elecard reserves the right to make changes without
+//	notice at any time. Elecard makes no warranty, expressed,
+//	implied or statutory, including but not limited to any implied
+//	warranty of merchantability of fitness for any particular purpose,
+//	or that the use will not infringe any third party patent, copyright
+//	or trademark.
+//
+//	Elecard must not be liable for any loss or damage arising
+//	from its use.
+//
+//////////////////////////////////////////////////////////////////////////
+//
+//	purpose: Elecard Hls Sink properties GUIDs 
+//
+//////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+// {2A8EFEA7-3B60-48D4-BE3B-0EE293376488}
+static const GUID EHlsSink_ProtocolVersion = 
+{ 0x2a8efea7, 0x3b60, 0x48d4, { 0xbe, 0x3b, 0xe, 0xe2, 0x93, 0x37, 0x64, 0x88 } };
+
+// {C97007E0-D931-4355-9AD9-BE2052514220}
+static const GUID EHlsSink_Name = 
+{ 0xc97007e0, 0xd931, 0x4355, { 0x9a, 0xd9, 0xbe, 0x20, 0x52, 0x51, 0x42, 0x20 } };
+
+// {0D4260F5-A0D8-4433-97FC-C4AA344AD53D}
+static const GUID EHlsSink_BaseUrl = 
+{ 0xd4260f5, 0xa0d8, 0x4433, { 0x97, 0xfc, 0xc4, 0xaa, 0x34, 0x4a, 0xd5, 0x3d } };
+
+// {6B652374-45D7-4C8C-9246-FB58A5C9F606}
+static const GUID EHlsSink_OutputPath = 
+{ 0x6b652374, 0x45d7, 0x4c8c, { 0x92, 0x46, 0xfb, 0x58, 0xa5, 0xc9, 0xf6, 0x6 } };
+
+// {180BFDF6-BECA-447E-A2FB-47D38100E4C1}
+static const GUID EHlsSink_UseRelativeUrls = 
+{ 0x180bfdf6, 0xbeca, 0x447e, { 0xa2, 0xfb, 0x47, 0xd3, 0x81, 0x0, 0xe4, 0xc1 } };
+
+// {F1C83373-324A-473E-BFFB-F0B991412DCF}
+static const GUID EHlsSink_PlaylistDuration = 
+{ 0xf1c83373, 0x324a, 0x473e, { 0xbf, 0xfb, 0xf0, 0xb9, 0x91, 0x41, 0x2d, 0xcf } };
+
+// {465FE5DB-DABA-48E9-84A5-88D175621AB1}
+static const GUID EHlsSink_SegmentDuration = 
+{ 0x465fe5db, 0xdaba, 0x48e9, { 0x84, 0xa5, 0x88, 0xd1, 0x75, 0x62, 0x1a, 0xb1 } };
+
+// {BE29D6EF-74EE-4DCC-A106-0A2B96F05518}
+static const GUID EHlsSink_Live = 
+{ 0xbe29d6ef, 0x74ee, 0x4dcc, { 0xa1, 0x6, 0xa, 0x2b, 0x96, 0xf0, 0x55, 0x18 } };
+
+// {C1AC7E97-AF42-4A6A-B991-9321CA39AD20}
+static const GUID EHlsSink_SegmentFilename = 
+{ 0xc1ac7e97, 0xaf42, 0x4a6a, { 0xb9, 0x91, 0x93, 0x21, 0xca, 0x39, 0xad, 0x20 } };
+
+// {BEB34321-A207-4F15-BCD9-DAE6EA8023DC}
+static const GUID EHlsSink_MediaPlaylistFilename = 
+{ 0xbeb34321, 0xa207, 0x4f15, { 0xbc, 0xd9, 0xda, 0xe6, 0xea, 0x80, 0x23, 0xdc } };
+
+// {C9D0D065-DA41-40F9-B977-81D372421A30}
+static const GUID EHlsSink_MasterPlaylistFilename = 
+{ 0xc9d0d065, 0xda41, 0x40f9, { 0xb9, 0x77, 0x81, 0xd3, 0x72, 0x42, 0x1a, 0x30 } };
+
+// {84FCBAC2-E421-49B3-86A2-4CD915563E9B}
+static const GUID EHlsSink_EnableEncryption =
+{ 0x84fcbac2, 0xe421, 0x49b3, { 0x86, 0xa2, 0x4c, 0xd9, 0x15, 0x56, 0x3e, 0x9b } };
+
+// {D3F55050-5532-4EC9-8DE2-C7F7A87CF936}
+static const GUID EHlsSink_KeyUrl =
+{ 0xd3f55050, 0x5532, 0x4ec9, { 0x8d, 0xe2, 0xc7, 0xf7, 0xa8, 0x7c, 0xf9, 0x36 } };
+
+// {F77BCC8D-E557-4D99-90D8-0612C549B950}
+static const GUID EHlsSink_Key =
+{ 0xf77bcc8d, 0xe557, 0x4d99, { 0x90, 0xd8, 0x6, 0x12, 0xc5, 0x49, 0xb9, 0x50 } };
+
+// {08D57DA7-A10A-4315-937E-61916AAA3F56}
+static const GUID EHlsSink_IV =
+{ 0x8d57da7, 0xa10a, 0x4315, { 0x93, 0x7e, 0x61, 0x91, 0x6a, 0xaa, 0x3f, 0x56 } };
+
+// {2D49406E-35F6-4401-8BB2-CADDEBE34C85}
+static const GUID EHlsSink_StreamName = 
+{ 0x2d49406e, 0x35f6, 0x4401, { 0x8b, 0xb2, 0xca, 0xdd, 0xeb, 0xe3, 0x4c, 0x85 } };
+
+// {ED84F708-E085-414D-88E3-8549E24A5746}
+static const GUID EHlsSink_Bandwidth = 
+{ 0xed84f708, 0xe085, 0x414d, { 0x88, 0xe3, 0x85, 0x49, 0xe2, 0x4a, 0x57, 0x46 } };
+
+// {9351C461-52A9-4B9A-B8D5-986D34C459BB}
+static const GUID EHlsSink_BufferFullness = 
+{ 0x9351c461, 0x52a9, 0x4b9a, { 0xb8, 0xd5, 0x98, 0x6d, 0x34, 0xc4, 0x59, 0xbb } };

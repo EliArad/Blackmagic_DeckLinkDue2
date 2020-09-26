@@ -43,7 +43,7 @@ private:
 	int BuildGraphs();
 
 	bool m_previewVideo;
-	bool m_enableDownGraph;
+	int m_enableDownGraph;
 
 	DSGraphUtils  *m_ds;
 

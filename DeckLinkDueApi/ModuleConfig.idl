@@ -1,0 +1,165 @@
+import "oaidl.idl";
+import "ocidl.idl";
+
+cpp_quote("//////////////////////////////////////////////////////////////////////////")
+cpp_quote("//")
+cpp_quote("//	original file name: ModuleConfig.idl")
+cpp_quote("//")
+cpp_quote("//////////////////////////////////////////////////////////////////////////")
+cpp_quote("//")
+cpp_quote("//	Copyright (c) 2005 Elecard Ltd.")
+cpp_quote("//	All rights are reserved.  Reproduction in whole or in part is prohibited")
+cpp_quote("//	without the written consent of the copyright owner.")
+cpp_quote("//")
+cpp_quote("//	Elecard Ltd. reserves the right to make changes without")
+cpp_quote("//	notice at any time. Elecard Ltd. makes no warranty, expressed,")
+cpp_quote("//	implied or statutory, including but not limited to any implied")
+cpp_quote("//	warranty of merchantability of fitness for any particular purpose,")
+cpp_quote("//	or that the use will not infringe any third party patent, copyright")
+cpp_quote("//	or trademark.")
+cpp_quote("//")
+cpp_quote("//	Elecard Ltd. must not be liable for any loss or damage arising")
+cpp_quote("//	from its use.")
+cpp_quote("//")
+cpp_quote("//////////////////////////////////////////////////////////////////////////")
+cpp_quote("//")
+cpp_quote("//	author of original IDL file:  Alexander Ivanov")
+cpp_quote("//")
+cpp_quote("//	purpose: ModuleConfig interfaces definitions")
+cpp_quote("//")
+cpp_quote("//////////////////////////////////////////////////////////////////////////")
+cpp_quote("")
+cpp_quote("")
+cpp_quote("// {486F726E-4D45-49b9-8A0C-C22A2B0524E8}")
+cpp_quote("DEFINE_GUID(IID_IModuleCallback, 0x486F726E, 0x4D45, 0x49b9, 0x8A, 0x0C, 0xC2, 0x2A, 0x2B, 0x05, 0x24, 0xE8);")
+cpp_quote("")
+cpp_quote("// {486F726E-4D43-49b9-8A0C-C22A2B0524E8}")
+cpp_quote("DEFINE_GUID(IID_IModuleConfig, 0x486F726E, 0x4D43, 0x49b9, 0x8A, 0x0C, 0xC2, 0x2A, 0x2B, 0x05, 0x24, 0xE8);")
+cpp_quote("")
+cpp_quote("// {486F726E-5043-49b9-8A0C-C22A2B0524E8}")
+cpp_quote("DEFINE_GUID(IID_IParamConfig, 0x486F726E, 0x5043, 0x49b9, 0x8A, 0x0C, 0xC2, 0x2A, 0x2B, 0x05, 0x24, 0xE8);")
+cpp_quote("")
+
+[
+    object,
+    local,
+    uuid(486F726E-4D45-49b9-8A0C-C22A2B0524E8),
+    pointer_default(unique)
+]
+interface IModuleCallback: IUnknown
+{
+    [helpstring("method OnModuleNotify  is called by the engine to notify the event sink about changes in the module internal state")]
+        HRESULT OnModuleNotify([in] const long cParams, [in] GUID* pParamIDs);
+}
+
+[
+    object,
+    local,
+    uuid(486F726E-5043-49b9-8A0C-C22A2B0524E8),
+    pointer_default(unique)
+]
+interface IParamConfig: IUnknown
+{        
+    [helpstring("method SetValue assigns the new value to this parameter, if ImmedApply is OATRUE then method validates and applies changes immediately, otherwise it should be verified and applied to the state of supplied module by the call to IModuleConfig::CommitChanges")]
+		HRESULT SetValue([in] const VARIANT* pValue, [in] BOOL bSetAndCommit);
+
+    [helpstring("method GetValue retrieves the committed value of this parameter from the current state of module")]
+		HRESULT GetValue([out] VARIANT* pValue, [in] BOOL bGetCommitted);
+
+    [helpstring("method SetVisible")]
+		HRESULT SetVisible(BOOL bVisible);
+
+    [helpstring("method GetVisible")]
+		HRESULT GetVisible(BOOL* bVisible);
+
+    [helpstring("method GetParamID")]
+		HRESULT GetParamID(GUID* pParamID);
+
+    [helpstring("method GetName retrieves the readable name of this parameter")]
+		HRESULT GetName([out] BSTR* pName);
+
+    [helpstring("method GetReadOnly helps to clarify whether this parameter is read-only or no")]
+		HRESULT GetReadOnly(BOOL* bReadOnly);
+
+    [helpstring("method GetFullInfo retrieves the committed value and its meaning, parameter name, read-only and visibility properties of this parameter in one call")]
+		HRESULT GetFullInfo([out] VARIANT* pValue, [out] BSTR* pMeaning, [out] BSTR* pName, [out] BOOL* bReadOnly, [out] BOOL* pVisible);
+
+    [helpstring("method GetDefValue retrieves the default value of parameter that was set by developer")]
+		HRESULT GetDefValue([out] VARIANT* pValue);
+
+    [helpstring("method GetValidRange retrieves the range of values that is valid for this parameter if some restrictions are presented")]
+		HRESULT GetValidRange([out] VARIANT* pMinValue, [out] VARIANT* pMaxValue, [out] VARIANT* pDelta);
+
+    [helpstring("method EnumValidValues retrieves the set of values that is valid for this parameter if some restrictions are presented")]
+		HRESULT EnumValidValues([in][out] long* pNumValidValues, [in][out] VARIANT* pValidValues,[in][out] BSTR* pValueNames);
+
+    [helpstring("method ValueToMeaning converts, if possible, some value to the human readable string")]
+		HRESULT ValueToMeaning([in] const VARIANT* pValue, [out] BSTR* pMeaning);
+
+    [helpstring("method MeaningToValue converts, if possible, the human readable string to the corresponded value")]
+		HRESULT MeaningToValue([in] const BSTR pMeaning, [out] VARIANT* pValue);
+}
+
+[
+    object,
+    local,
+    uuid(486F726E-4D43-49b9-8A0C-C22A2B0524E8),
+    pointer_default(unique)
+]
+interface IModuleConfig: IPersistStream
+{
+    [helpstring("method SetValue assigns the new value to the module parameter identified by pParamID unique identifier, it should be verified and applied to the inside state of module by the call to CommitChanges")]
+		HRESULT SetValue([in] const GUID* pParamID, [in]  const VARIANT* pValue);
+
+    [helpstring("method GetValue retrieves the value of the module parameter identified by pParamID unique identifier")]
+		HRESULT GetValue([in] const GUID* pParamID, [out] VARIANT* pValue);
+
+    [helpstring("method GetParamConfig retrieves the pointer to the interface of the module parameter identified by pParamID unique identifier")]
+		HRESULT GetParamConfig([in] const GUID* pParamID, [out] IParamConfig**  pValue);
+
+    [helpstring("method IsSupported clarifies whether the parameter identified by pParamID is valuable for this module or no.")]
+		HRESULT IsSupported([in] const GUID* pParamID);
+
+    [helpstring("method SetDefState resets all parameters of the module to its default values")]
+		HRESULT SetDefState();
+
+    [helpstring("method EnumParams retrieves the list of parameters that are valid for this module")]
+		HRESULT EnumParams([in][out] long* pNumParams, [in][out] GUID* pParamIDs);
+
+    [helpstring("method CommitChanges verifies and applies changes of parameters to the internal state of the module")]
+		HRESULT CommitChanges([out] VARIANT* pReason);
+
+    [helpstring("method DeclineChanges declines all unverified and don't applied changes of module parameters that have been made since the last call to CommitChanges and sets module to its previous committed state")]
+		HRESULT DeclineChanges();
+
+    [helpstring("method SaveToRegistry saves to the registry the internal module state that was successfully applied by the last call to CommitChanges")]
+		HRESULT SaveToRegistry([in] HKEY hKeyRoot, [in] const BSTR pszKeyName, [in] const BOOL bPreferReadable);
+
+    [helpstring("method LoadFromRegistry loads from the registry module parameters that should be verified and applied by the call to CommitChanges")]
+		HRESULT LoadFromRegistry([in] HKEY hKeyRoot, [in] const BSTR pszKeyName, [in] const BOOL bPreferReadable);
+
+    [helpstring("method RegisterForNotifies registers the client for getting notifies occurred inside the module")]
+		HRESULT RegisterForNotifies([in] IModuleCallback* pModuleCallback);
+
+    [helpstring("method UnregisterFromNotifies unregisters the client from getting notifies occurred inside the module")]
+		HRESULT UnregisterFromNotifies([in] IModuleCallback* pModuleCallback);
+}
+
+//-----------------
+[
+    uuid(72BEEB0A-94EC-4d7e-989E-FF40031447D4),
+	version(1.0),
+	helpstring("Elecard Module Config 1.0 Type Library")
+] 
+library ElecardModuleConfig
+{
+	[
+		uuid(2F2D8000-FD54-41f6-9E30-3B52243B13BD),
+	]
+	coclass ElercardModuleConfig
+	{
+		interface IModuleCallback;
+		interface IParamConfig;
+		[default] interface IModuleConfig;
+	};
+};

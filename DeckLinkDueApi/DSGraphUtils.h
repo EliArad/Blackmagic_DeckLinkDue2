@@ -65,6 +65,8 @@ private:
 	bool m_abort;
 
 	CComPtr<IBaseFilter> pFrameSourceFilter;
+	CComPtr<IBaseFilter> pVideoEncoder;
+	
 
 private:
 
@@ -81,6 +83,8 @@ private:
 	);
 
 	HRESULT SetNotifyEvent(HWND handle);
+	HRESULT AddElecardAVCEncoder();
+	HRESULT SetElecardEncoderParameter(int bitrate, int maxBitrate, int maxGopLength);
 
 };
 
