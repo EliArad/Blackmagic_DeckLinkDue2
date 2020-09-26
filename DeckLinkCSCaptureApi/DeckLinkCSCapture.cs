@@ -60,6 +60,15 @@ namespace DeckLinkCSCaptureLib
 
         [DllImport(path, CallingConvention = CallingConvention.StdCall)]
         public static extern void DL2_SetWindowSize(int x, int y, int width, int height);
+         
+
+        [DllImport(path, CallingConvention = CallingConvention.StdCall)]
+        public static extern void DL2_SetPreviewVideo(bool preview);
+
+        public void SetPreviewVideo(bool preview)
+        {
+            DL2_SetPreviewVideo(preview);
+        }
 
         public void SetWindowSize(int x, int y, int width, int height)
         {

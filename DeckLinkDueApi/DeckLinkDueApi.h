@@ -16,6 +16,7 @@ extern "C" {
 	DECLINK_API_EXPORTS bool  DL2_SetFrameCallback(FrameCallback p);
 	DECLINK_API_EXPORTS void  DL2_SetVideoHandle(HWND p);
 	DECLINK_API_EXPORTS void  DL2_SetWindowSize(int x, int y, int width, int height);
+	DECLINK_API_EXPORTS void  DL2_SetPreviewVideo(bool preview);
 
 #ifdef __cplusplus
 }

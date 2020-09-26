@@ -30,12 +30,18 @@
 #include <comutil.h>
 #include "D3D9Types.h"
 #include "PreviewWindowDX9.h"
+#include "Bgra32VideoFrame.h"
 
 PreviewWindowDX9::PreviewWindowDX9()
 	: m_refCount(1)
 	
 {
 	m_init = false;
+
+	receivedVideoFrame = NULL;
+	deckLinkFrameConverter = NULL;
+	bgra32Frame = NULL;
+	m_previewVideo = true;
 
 }
 
@@ -46,8 +52,27 @@ bool PreviewWindowDX9::init()
 	if (m_deckLinkScreenPreviewHelper.CoCreateInstance(CLSID_CDeckLinkDX9ScreenPreviewHelper, nullptr, CLSCTX_ALL) != S_OK)
 		return false;
 
+
+	// Create frame conversion instance
+	HRESULT result = GetDeckLinkVideoConversion(&deckLinkFrameConverter);
+	if (result != S_OK)
+		return false;
 	
 	return true;
+}
+
+
+HRESULT PreviewWindowDX9::GetDeckLinkVideoConversion(IDeckLinkVideoConversion **deckLinkVideoConversion)
+{
+	HRESULT result = S_OK;
+
+	result = CoCreateInstance(CLSID_CDeckLinkVideoConversion, NULL, CLSCTX_ALL, IID_IDeckLinkVideoConversion, (void**)deckLinkVideoConversion);
+	if (FAILED(result))
+	{
+		fprintf(stderr, "A DeckLink video conversion interface could not be created.\n");
+	}
+
+	return result;
 }
 
 void PreviewWindowDX9::SetFrameCallback(FrameCallback p)
@@ -137,6 +162,11 @@ ULONG PreviewWindowDX9::Release()
 	return newRefValue;
 }
 
+void PreviewWindowDX9::SetPreviewVideo(bool preview)
+{
+	m_previewVideo = preview;
+}
+
 HRESULT	PreviewWindowDX9::DrawFrame(IDeckLinkVideoFrame* theFrame)
 {
 	if (!theFrame)
@@ -145,8 +175,30 @@ HRESULT	PreviewWindowDX9::DrawFrame(IDeckLinkVideoFrame* theFrame)
 	// Set current frame in preview helper
 	HRESULT hr = m_deckLinkScreenPreviewHelper->SetFrame(theFrame);
 
-	// Then draw the frame to the scene
-	Render();
+
+	if (pFrameCallback != nullptr)
+	{ 
+		int width = theFrame->GetWidth();
+		int height = theFrame->GetHeight();
+
+		if (width != 1920)
+			return S_OK;
+
+		BMDPixelFormat pif = theFrame->GetPixelFormat();
+
+		void* videoPixels;
+		
+		bgra32Frame = new Bgra32VideoFrame(width, height, theFrame->GetFlags());
+
+		deckLinkFrameConverter->ConvertFrame(theFrame, bgra32Frame);
+		
+		bgra32Frame->GetBytes(&videoPixels);
+
+		pFrameCallback((uint8_t *)videoPixels, width, height, pif);
+	}
+
+	if (m_previewVideo == true)
+		Render();
 
 	return S_OK;
 }

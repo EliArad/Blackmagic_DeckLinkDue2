@@ -55,3 +55,13 @@ DECLINK_API_EXPORTS void  DL2_SetWindowSize(int x, int y, int width, int height)
 	pCapture->SetWindowSize(x, y, width, height);
 
 }
+
+DECLINK_API_EXPORTS void DL2_SetPreviewVideo(bool preview)
+{
+
+	if (pCapture == NULL)
+		pCapture = new DeckLinkCapture();
+
+    pCapture->SetPreviewVideo(preview);
+
+}

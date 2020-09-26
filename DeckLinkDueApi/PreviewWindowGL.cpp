@@ -155,10 +155,11 @@ HRESULT	PreviewWindowGL::DrawFrame(IDeckLinkVideoFrame* theFrame)
 	if (width != 1920)
 		return S_OK;
 	 
-	BMDPixelFormat pif = theFrame->GetPixelFormat();
-	
+	 
 	if (pFrameCallback != nullptr)
 	{
+		BMDPixelFormat pif = theFrame->GetPixelFormat();
+
 		void* videoPixels;
 		theFrame->GetBytes(&videoPixels);
 		 

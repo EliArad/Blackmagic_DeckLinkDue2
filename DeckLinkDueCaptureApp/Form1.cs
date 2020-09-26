@@ -21,52 +21,66 @@ namespace DeckLinkDueCaptureApp
         DeckLinkCSCaptureApi m_dl2 = new DeckLinkCSCaptureApi();
         FrameCallback pFrameCallback;
 
-        
-        byte [] pitcureByteArray = new byte[1920 * 1080 * 4];
-    
+         
 
         public Form1()
         {
             InitializeComponent();
+            this.KeyPreview = true;
             Control.CheckForIllegalCrossThreadCalls = false;
             pFrameCallback = new FrameCallback(FrameCallbackData);
-            //m_dl2.SetFrameCallback(pFrameCallback);
+            m_dl2.SetFrameCallback(pFrameCallback);
             m_dl2.SetVideoHandle(panel1.Handle);
-            this.Resize += Form1_Resize;
             m_dl2.SetWindowSize(0, 0, panel1.Width, panel1.Height);
             m_dl2.StartCapture(SURFACE_ENGINE.DX9);
         }
-
-        private void Form1_Resize(object sender, EventArgs e)
-        {
-            panel1.Width = this.Width;
-            panel1.Height = this.Height;
-            panel1.Left = this.Left;
-            panel1.Top = this.Top;
-            m_dl2.SetVideoHandle(panel1.Handle);
-            m_dl2.SetWindowSize(0, 0, panel1.Width, panel1.Height);
-
-        }
+ 
 
         [DllImport("kernel32.dll", EntryPoint = "CopyMemory", SetLastError = false)]
         public static extern void CopyMemory(IntPtr dest, IntPtr src, uint count);
 
         void FrameCallbackData(IntPtr buffer, int width, int height, BMDPixelFormat pf)
         {
-           
+             
 
-            Bitmap b = new Bitmap((int)width, (int)height, PixelFormat.Format16bppRgb565);
+            Bitmap b = new Bitmap((int)width, (int)height, PixelFormat.Format32bppRgb);
             Rectangle BoundsRect = new Rectangle(0, 0, (int)width, (int)height);
             BitmapData bmpData = b.LockBits(BoundsRect,
                                             ImageLockMode.WriteOnly,
                                             b.PixelFormat);
 
             IntPtr ptr = bmpData.Scan0;
-
             // fill in rgbValues
-            CopyMemory(ptr, buffer, (uint)(width * height * 2));
+            CopyMemory(ptr, buffer, 1920 * 1080 * 4);
+
             b.UnlockBits(bmpData);
-            //pictureBox1.Image = b;
-        }        
+            /*
+            if (m_saveImage == true)
+            {
+                b.Save(m_imageFileName, ImageFormat.Bmp);
+                m_saveImage = false;
+            }
+            */
+            pictureBox1.Image = b;
+            
+
+
+        }
+
+        bool m_previewVideo = true;
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode ==  Keys.F2)
+            {
+                m_previewVideo = !m_previewVideo;
+                m_dl2.SetPreviewVideo(m_previewVideo);
+                pictureBox1.Visible = !m_previewVideo;
+            }
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            m_dl2.StopCapture();
+        }
     }
 }

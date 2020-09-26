@@ -142,6 +142,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bgra32VideoFrame.h" />
     <ClInclude Include="DeckLinkAPI_h.h" />
     <ClInclude Include="DeckLinkCapture.h" />
     <ClInclude Include="DeckLinkDevice.h" />
@@ -167,6 +168,7 @@
       </PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\ProfileCallback.cpp" />
+    <ClCompile Include="Bgra32VideoFrame.cpp" />
     <ClCompile Include="DeckLinkCapture.cpp" />
     <ClCompile Include="DeckLinkDevice.cpp" />
     <ClCompile Include="DeckLinkDeviceDiscovery.cpp" />

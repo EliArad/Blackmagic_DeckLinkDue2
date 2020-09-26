@@ -24,6 +24,7 @@ public:
 	bool SetFrameCallback(FrameCallback p);
 	bool SetVideoHandle(HWND p);
 	void SetWindowSize(int x, int y, int width, int height);
+	void SetPreviewVideo(bool preview);
 
 
 private:
@@ -38,6 +39,8 @@ private:
 	CComPtr<PreviewWindowDX9>			m_previewWindowDX9;
 
 	void AddDevice(CComPtr<IDeckLink>& deckLink);
+
+	bool m_previewVideo;
 
 };
 

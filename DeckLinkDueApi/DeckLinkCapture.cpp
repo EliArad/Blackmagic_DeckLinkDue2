@@ -7,7 +7,7 @@ int DeviceNotification();
 
 DeckLinkCapture::DeckLinkCapture()
 {
-
+	m_previewVideo = true;
 	pFrameCallback = nullptr;
 	CoInitializeEx(NULL, COINIT_MULTITHREADED);
 	
@@ -92,6 +92,8 @@ bool DeckLinkCapture::StartCapture(SURFACE_ENGINE st)
 	if (profileManager)
 		profileManager->SetCallback(m_profileCallback);
 
+
+	m_selectedDevice = newDevice;
 	if (st == SURFACE_ENGINE::OPENGL)
 	{
 		m_previewWindowGL.Attach(new PreviewWindowGL());
@@ -165,6 +167,9 @@ bool DeckLinkCapture::SetVideoHandle(HWND p)
 	if (m_previewWindowGL != nullptr)
 		return m_previewWindowGL->SetVideoHandle(p);
 
+	if (m_previewWindowDX9 != nullptr)
+		return m_previewWindowDX9->SetVideoHandle(p);
+
 	return false;
 
 }
@@ -174,4 +179,12 @@ void DeckLinkCapture::SetWindowSize(int x, int y, int width, int height)
 		m_previewWindowGL->SetWindowSize(x, y, width, height);
 }
 
+void DeckLinkCapture::SetPreviewVideo(bool preview)
+{
+	m_previewVideo = preview;
+
+	if (m_previewWindowDX9 != nullptr)
+		m_previewWindowDX9->SetPreviewVideo(preview);
+
+}
 
