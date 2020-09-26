@@ -45,6 +45,9 @@ PreviewWindowDX9::PreviewWindowDX9()
 	m_previewVideo = true;
 	m_useSourceFilter = false;
 
+	m_rgb = true;
+	pixels180Degree = new unsigned char[1920* 1080 * 4];
+
 }
 
 bool PreviewWindowDX9::init()
@@ -201,13 +204,31 @@ HRESULT	PreviewWindowDX9::DrawFrame(IDeckLinkVideoFrame* theFrame)
 		if (bgra32Frame == NULL)
 			bgra32Frame = new Bgra32VideoFrame(width, height, theFrame->GetFlags());
 
-		deckLinkFrameConverter->ConvertFrame(theFrame, bgra32Frame);
-		bgra32Frame->GetBytes(&videoPixels);
+		if (m_rgb == true)
+		{
+			deckLinkFrameConverter->ConvertFrame(theFrame, bgra32Frame);
+			bgra32Frame->GetBytes(&videoPixels);
+		}
+		else
+		{
+			theFrame->GetBytes(&videoPixels);
+		}
 	}
 
 	if (m_useSourceFilter == true)
 	{
-		pFrameLiveSourceInterface->AddFrame((BYTE *)videoPixels, RGBA_HD_SIZE);
+		bool swap_180 = false;
+		if (swap_180 == true)
+		{
+			uint8_t *p = (uint8_t *)videoPixels;
+			 
+
+			pFrameLiveSourceInterface->AddFrame((BYTE *)pixels180Degree, RGBA_HD_SIZE);
+		}
+		else 
+		{
+			pFrameLiveSourceInterface->AddFrame((BYTE *)videoPixels, RGBA_HD_SIZE);
+		}
 	}
 
 	if (pFrameCallback != nullptr)

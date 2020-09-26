@@ -265,7 +265,7 @@ int DeckLinkCapture::BuildGraphs()
 	if (m_enableDownGraph > 0)
 	{
 		m_ds = new DSGraphUtils();
-		return m_ds->Build_H264_TransportMux_Network(m_multicastIpAddress, m_multicastPort, m_ipInterfaceAddress);
+		return m_ds->Build_H264_TransportMux_Network(m_multicastIpAddress, m_multicastPort, m_ipInterfaceAddress, m_bitrate , m_goplength);
 	}
 	return 1;
 }

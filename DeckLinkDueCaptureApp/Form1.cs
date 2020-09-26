@@ -25,16 +25,25 @@ namespace DeckLinkDueCaptureApp
         public Form1()
         {
             InitializeComponent();
+
+            AppSettings.Instance.Load("DeckLinkDueCaptureApp.json");
+
             this.KeyPreview = true;
             Control.CheckForIllegalCrossThreadCalls = false;
             pFrameCallback = new FrameCallback(FrameCallbackData);
             //m_dl2.SetFrameCallback(pFrameCallback);
             m_dl2.SetVideoHandle(panel1.Handle);
             m_dl2.SetWindowSize(0, 0, panel1.Width, panel1.Height);
-            m_dl2.Build_H264_TransportMux_Network("234.5.5.5" , 6000 , "10.0.0.10", 3000000, 15);
+            if (AppSettings.Instance.Config.EnableMulticast == true)
+            {
+                m_dl2.Build_H264_TransportMux_Network(AppSettings.Instance.Config.MulticastIpAddress,
+                                                      AppSettings.Instance.Config.MulticastPort,
+                                                      AppSettings.Instance.Config.NicIpAddress, AppSettings.Instance.Config.bitrate,
+                                                      AppSettings.Instance.Config.gopLength);
+            }
 
             int res;
-            if ((res = m_dl2.StartCapture(DECKLINK2_DEVICES.DEVICE2 ,SURFACE_ENGINE.DX9)) < 0)
+            if ((res = m_dl2.StartCapture(AppSettings.Instance.Config.Device ,SURFACE_ENGINE.DX9)) < 0)
             {
                 MessageBox.Show("Failed to start capture: " + res);
             }

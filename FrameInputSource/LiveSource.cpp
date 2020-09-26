@@ -177,7 +177,7 @@ HRESULT CLiveSourceStream::GetMediaType(int iPosition, CMediaType* pmt)
 		vih->bmiHeader.biWidth = 1920;
 		vih->bmiHeader.biHeight = 1080;
 		vih->bmiHeader.biPlanes = 1;
-		vih->bmiHeader.biBitCount = 10;// 16;
+		vih->bmiHeader.biBitCount = 16;// 16;
 		vih->bmiHeader.biCompression = 'YVYU';
 		vih->bmiHeader.biSizeImage = pmt->lSampleSize = vih->bmiHeader.biWidth * vih->bmiHeader.biHeight * vih->bmiHeader.biBitCount / 8;
 		vih->dwBitRate = vih->bmiHeader.biSizeImage * (DWORD)((float)UNITS / vih->AvgTimePerFrame) * 8;

@@ -274,7 +274,7 @@ done:
 	return hr;
 }
 
-HRESULT DSGraphUtils::Build_H264_TransportMux_Network(const WCHAR *IpAddress, const int port, const WCHAR *IpInterfaceAddress)
+HRESULT DSGraphUtils::Build_H264_TransportMux_Network(const WCHAR *IpAddress, const int port, const WCHAR *IpInterfaceAddress, unsigned int bitrate, int goplength)
 {
 	HRESULT hr = S_OK;
 
@@ -286,7 +286,7 @@ HRESULT DSGraphUtils::Build_H264_TransportMux_Network(const WCHAR *IpAddress, co
 		return hr;
 	 
 
-	hr = AddElecardAVCEncoder();
+	hr = AddElecardAVCEncoder(bitrate, goplength);
 	if (hr != S_OK)
 		return hr;
 
@@ -408,7 +408,7 @@ HRESULT DSGraphUtils::AddMulticastNetwordSender(const WCHAR *IpAddress, const in
 	return hr;
 }
 
-HRESULT DSGraphUtils::AddElecardAVCEncoder()
+HRESULT DSGraphUtils::AddElecardAVCEncoder(unsigned int bitrate, int goplength)
 {
 
 	static const GUID CLSID_AVCEncoder =
@@ -422,7 +422,7 @@ HRESULT DSGraphUtils::AddElecardAVCEncoder()
 
 	ActivateFilter(pVideoEncoder);
 
-	if ((hr = SetElecardEncoderParameter(1500000, 0, 15)) != S_OK)
+	if ((hr = SetElecardEncoderParameter(bitrate, 0, goplength)) != S_OK)
 	{
 		return hr;
 	} 

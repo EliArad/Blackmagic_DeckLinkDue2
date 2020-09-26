@@ -38,7 +38,14 @@ class PreviewWindowDX9 : public IDeckLinkScreenPreviewCallback
 {
 public:
 	PreviewWindowDX9();
-	virtual ~PreviewWindowDX9() {}
+	virtual ~PreviewWindowDX9() 
+	{
+		if (pixels180Degree != NULL)
+		{
+			delete pixels180Degree;
+			pixels180Degree = NULL;
+		}
+	}
 
 	bool						init();
 	void						Render(void);
@@ -85,5 +92,9 @@ private:
 
 	bool m_previewVideo;
 	bool m_useSourceFilter;
+
+	unsigned char *pixels180Degree;
+
+	bool m_rgb;
 };
 

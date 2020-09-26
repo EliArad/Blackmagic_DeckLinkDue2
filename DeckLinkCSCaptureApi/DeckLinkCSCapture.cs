@@ -41,10 +41,14 @@ namespace DeckLinkCSCaptureLib
             OPENGL,
             DX9
         }
-        
 
 
+#if DEBUG
         const string path = @"C:\Program Files\Bauotech\Dll\DeckLinkDueApi.dll";
+#else
+        const string path = @"DeckLinkDueApi.dll";
+#endif 
+
 
         [DllImport(path, CallingConvention = CallingConvention.StdCall)]
         public static extern int DL2_StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st);
@@ -76,7 +80,7 @@ namespace DeckLinkCSCaptureLib
         public static extern void DL2_Build_H264_TransportMux_Network([MarshalAs(UnmanagedType.LPWStr)]String IpAddress, int port, [MarshalAs(UnmanagedType.LPWStr)]String IpInterfaceAddress, uint bitrate, int goplength);
 
 
-        public void Build_H264_TransportMux_Network(string IpAddress, int port, string IpInterfaceAddress, uint bitrate, int goplength)
+        public void Build_H264_TransportMux_Network(string IpAddress, int port, string IpInterfaceAddress, uint bitrate = 1500000, int goplength = 15)
         {
             DL2_Build_H264_TransportMux_Network(IpAddress, port, IpInterfaceAddress, bitrate, goplength);
         }
