@@ -57,19 +57,52 @@ extern IDeckLink* deckLink3;
 extern IDeckLink* deckLink4;
 
 
-bool DeckLinkCapture::StartCapture(SURFACE_ENGINE st)
+bool DeckLinkCapture::StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st)
 {
 
 
 	DeviceNotification();
 	 
-	while (deckLink2 == NULL)
+	IDeckLink* tmpdeckLink = NULL;
+
+	if (device == DECKLINK2_DEVICES::DEVICE1)
 	{
-		Sleep(500);
+		while (deckLink1 == NULL)
+		{
+			Sleep(500);
+		}
+		tmpdeckLink = deckLink1;
+	}
+
+	if (device == DECKLINK2_DEVICES::DEVICE2)
+	{
+		while (deckLink2 == NULL)
+		{
+			Sleep(500);
+		}
+		tmpdeckLink = deckLink2;
+	}
+
+	if (device == DECKLINK2_DEVICES::DEVICE3)
+	{
+		while (deckLink3 == NULL)
+		{
+			Sleep(500);
+		}
+		tmpdeckLink = deckLink3;
 	}
 
 
-	CComPtr<IDeckLink> deckLink(deckLink2);
+	if (device == DECKLINK2_DEVICES::DEVICE4)
+	{
+		while (deckLink4 == NULL)
+		{
+			Sleep(500);
+		}
+		tmpdeckLink = deckLink4;
+	}
+
+	CComPtr<IDeckLink> deckLink(tmpdeckLink);
 
 	CComPtr<DeckLinkDevice>		newDevice;
 

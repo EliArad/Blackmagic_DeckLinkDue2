@@ -27,6 +27,13 @@ namespace DeckLinkCSCaptureLib
             bmdFormatDNxHR = 0x41566468
         }
 
+        public enum DECKLINK2_DEVICES
+        {
+            DEVICE1,
+            DEVICE2,
+            DEVICE3,
+            DEVICE4,
+        }
 
         public enum SURFACE_ENGINE
         {
@@ -40,7 +47,7 @@ namespace DeckLinkCSCaptureLib
         const string path = @"C:\Program Files\Bauotech\Dll\DeckLinkDueApi.dll";
 
         [DllImport(path, CallingConvention = CallingConvention.StdCall)]
-        public static extern bool DL2_StartCapture(SURFACE_ENGINE st);
+        public static extern bool DL2_StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st);
 
         [DllImport(path, CallingConvention = CallingConvention.StdCall)]
         public static extern bool DL2_StopCapture();
@@ -75,9 +82,9 @@ namespace DeckLinkCSCaptureLib
             DL2_SetWindowSize(x, y, width, height);
 
         }
-        public bool StartCapture(SURFACE_ENGINE st)
+        public bool StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st)
         {
-            return DL2_StartCapture(st);
+            return DL2_StartCapture(device, st);
         }
 
         public bool StopCapture()

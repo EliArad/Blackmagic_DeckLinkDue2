@@ -19,7 +19,7 @@ public:
 	DeckLinkCapture();
 	~DeckLinkCapture();
 
-	bool StartCapture(SURFACE_ENGINE st);
+	bool StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st);
 	bool StopCapture();
 	bool SetFrameCallback(FrameCallback p);
 	bool SetVideoHandle(HWND p);

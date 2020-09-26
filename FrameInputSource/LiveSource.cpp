@@ -91,7 +91,7 @@ CLiveSourceStream::CLiveSourceStream(CBaseFilter *pFilter, CCritSec *pLock, HRES
 	m_bmpInfo.biClrUsed = 0;
 	m_bmpInfo.biXPelsPerMeter = 0;
 	m_bmpInfo.biYPelsPerMeter = 0;
-	m_pintype = 0;
+	m_pintype = 1;
 }
 
 CLiveSourceStream::~CLiveSourceStream()

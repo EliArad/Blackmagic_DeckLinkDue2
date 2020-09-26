@@ -20,7 +20,6 @@ namespace DeckLinkDueCaptureApp
 
         DeckLinkCSCaptureApi m_dl2 = new DeckLinkCSCaptureApi();
         FrameCallback pFrameCallback;
-
          
 
         public Form1()
@@ -29,10 +28,10 @@ namespace DeckLinkDueCaptureApp
             this.KeyPreview = true;
             Control.CheckForIllegalCrossThreadCalls = false;
             pFrameCallback = new FrameCallback(FrameCallbackData);
-            m_dl2.SetFrameCallback(pFrameCallback);
+            //m_dl2.SetFrameCallback(pFrameCallback);
             m_dl2.SetVideoHandle(panel1.Handle);
             m_dl2.SetWindowSize(0, 0, panel1.Width, panel1.Height);
-            m_dl2.StartCapture(SURFACE_ENGINE.DX9);
+            m_dl2.StartCapture(DECKLINK2_DEVICES.DEVICE2 ,SURFACE_ENGINE.DX9);
         }
  
 
@@ -62,9 +61,6 @@ namespace DeckLinkDueCaptureApp
             }
             */
             pictureBox1.Image = b;
-            
-
-
         }
 
         bool m_previewVideo = true;
