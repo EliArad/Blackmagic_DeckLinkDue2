@@ -11,12 +11,13 @@
 extern "C" {
 #endif 
 
-	DECLINK_API_EXPORTS bool  DL2_StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st);
+	DECLINK_API_EXPORTS int   DL2_StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st);
 	DECLINK_API_EXPORTS bool  DL2_StopCapture();
 	DECLINK_API_EXPORTS bool  DL2_SetFrameCallback(FrameCallback p);
 	DECLINK_API_EXPORTS void  DL2_SetVideoHandle(HWND p);
 	DECLINK_API_EXPORTS void  DL2_SetWindowSize(int x, int y, int width, int height);
 	DECLINK_API_EXPORTS void  DL2_SetPreviewVideo(bool preview);
+	DECLINK_API_EXPORTS void  DL2_Build_H264_TransportMux_Network();
 
 #ifdef __cplusplus
 }

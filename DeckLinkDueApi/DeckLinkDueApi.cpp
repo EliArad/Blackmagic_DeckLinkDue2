@@ -9,7 +9,7 @@ DeckLinkCapture  *pCapture = NULL;
 
 FrameCallback pFrameCallback;
 
-DECLINK_API_EXPORTS bool  DL2_StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st)
+DECLINK_API_EXPORTS int DL2_StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st)
 {
 	if (pCapture == NULL)
 		pCapture = new DeckLinkCapture();
@@ -63,5 +63,16 @@ DECLINK_API_EXPORTS void DL2_SetPreviewVideo(bool preview)
 		pCapture = new DeckLinkCapture();
 
     pCapture->SetPreviewVideo(preview);
+
+}
+
+
+DECLINK_API_EXPORTS void DL2_Build_H264_TransportMux_Network()
+{
+
+	if (pCapture == NULL)
+		pCapture = new DeckLinkCapture();
+
+	pCapture->Build_H264_TransportMux_Network();
 
 }

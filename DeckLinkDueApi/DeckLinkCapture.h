@@ -19,12 +19,13 @@ public:
 	DeckLinkCapture();
 	~DeckLinkCapture();
 
-	bool StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st);
+	int StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st);
 	bool StopCapture();
 	bool SetFrameCallback(FrameCallback p);
 	bool SetVideoHandle(HWND p);
 	void SetWindowSize(int x, int y, int width, int height);
 	void SetPreviewVideo(bool preview);
+	void Build_H264_TransportMux_Network();
 
 
 private:
@@ -39,8 +40,12 @@ private:
 	CComPtr<PreviewWindowDX9>			m_previewWindowDX9;
 
 	void AddDevice(CComPtr<IDeckLink>& deckLink);
+	int BuildGraphs();
 
 	bool m_previewVideo;
+	bool m_enableDownGraph;
+
+	DSGraphUtils  *m_ds;
 
 };
 

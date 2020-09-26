@@ -57,7 +57,7 @@ extern IDeckLink* deckLink3;
 extern IDeckLink* deckLink4;
 
 
-bool DeckLinkCapture::StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st)
+int DeckLinkCapture::StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st)
 {
 
 
@@ -113,12 +113,12 @@ bool DeckLinkCapture::StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st)
 	catch (...)
 	{
 		// Device does not have IDeckLinkInput interface, eg it is a DeckLink Mini Monitor
-		return false;
+		return -232;
 	}
 
 	// Initialise new DeckLinkDevice object
 	if (!newDevice->init())
-		return false;
+		return -2832;
 
 	// Register profile callback with newly added device's profile manager
 	CComQIPtr<IDeckLinkProfileManager> profileManager(newDevice->getDeckLinkInstance());
@@ -137,16 +137,20 @@ bool DeckLinkCapture::StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st)
 		m_previewWindowGL->SetFrameCallback(pFrameCallback);
 		m_previewWindowGL->SetVideoHandle(pVideoHandle);
 
+		int res;
+		if ((res = BuildGraphs()) < 0)
+			return res;
+
 		if (newDevice)
 		{
 			if (newDevice->startCapture(BMDDisplayMode::bmdModeNTSC, m_previewWindowGL, true) == true)
 			{
-				return true;
+				return 1;
 			}
 			else
 			{
 				m_selectedDevice->stopCapture();
-				return false;
+				return -394;
 			}
 		}
 
@@ -162,16 +166,20 @@ bool DeckLinkCapture::StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st)
 		m_previewWindowDX9->SetFrameCallback(pFrameCallback);
 		m_previewWindowDX9->SetVideoHandle(pVideoHandle);
 
+		int res;
+		if ((res = BuildGraphs()) < 0)
+			return res;
+
 		if (newDevice)
 		{
 			if (newDevice->startCapture(BMDDisplayMode::bmdModeNTSC, m_previewWindowDX9, true) == true)
 			{
-				return true;
+				return 1;
 			}
 			else
 			{
 				m_selectedDevice->stopCapture();
-				return false;
+				return -39424;
 			}
 		}
 	}
@@ -183,6 +191,11 @@ bool DeckLinkCapture::StopCapture()
 {
 	if (m_selectedDevice)
 		m_selectedDevice->stopCapture();
+
+	if (m_ds != NULL)
+	{
+		m_ds->Close();
+	}
 
 	return true;
 }
@@ -221,3 +234,17 @@ void DeckLinkCapture::SetPreviewVideo(bool preview)
 
 }
 
+void DeckLinkCapture::Build_H264_TransportMux_Network()
+{
+	m_enableDownGraph = true;
+}
+int DeckLinkCapture::BuildGraphs()
+{
+	if (m_enableDownGraph)
+	{
+		m_ds = new DSGraphUtils();
+		return m_ds->Build_H264_TransportMux_Network();
+	}
+	return 1;
+}
+ 

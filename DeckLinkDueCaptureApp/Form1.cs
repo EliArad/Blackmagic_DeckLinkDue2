@@ -31,7 +31,13 @@ namespace DeckLinkDueCaptureApp
             //m_dl2.SetFrameCallback(pFrameCallback);
             m_dl2.SetVideoHandle(panel1.Handle);
             m_dl2.SetWindowSize(0, 0, panel1.Width, panel1.Height);
-            m_dl2.StartCapture(DECKLINK2_DEVICES.DEVICE2 ,SURFACE_ENGINE.DX9);
+            m_dl2.Build_H264_TransportMux_Network();
+
+            int res;
+            if ((res = m_dl2.StartCapture(DECKLINK2_DEVICES.DEVICE2 ,SURFACE_ENGINE.DX9)) < 0)
+            {
+                MessageBox.Show("Failed to start capture: " + res);
+            }
         }
  
 
@@ -41,7 +47,6 @@ namespace DeckLinkDueCaptureApp
         void FrameCallbackData(IntPtr buffer, int width, int height, BMDPixelFormat pf)
         {
              
-
             Bitmap b = new Bitmap((int)width, (int)height, PixelFormat.Format32bppRgb);
             Rectangle BoundsRect = new Rectangle(0, 0, (int)width, (int)height);
             BitmapData bmpData = b.LockBits(BoundsRect,

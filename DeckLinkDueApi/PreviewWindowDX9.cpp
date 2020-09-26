@@ -32,6 +32,7 @@
 #include "PreviewWindowDX9.h"
 #include "Bgra32VideoFrame.h"
 
+
 PreviewWindowDX9::PreviewWindowDX9()
 	: m_refCount(1)
 	
@@ -42,6 +43,7 @@ PreviewWindowDX9::PreviewWindowDX9()
 	deckLinkFrameConverter = NULL;
 	bgra32Frame = NULL;
 	m_previewVideo = true;
+	m_useSourceFilter = false;
 
 }
 
@@ -160,6 +162,12 @@ ULONG PreviewWindowDX9::Release()
 		delete this;
 
 	return newRefValue;
+}
+
+void PreviewWindowDX9::SetSourceFilter(CComPtr<ILiveSource> p)
+{
+	m_useSourceFilter = true;
+	pFrameLiveSourceInterface = p;
 }
 
 void PreviewWindowDX9::SetPreviewVideo(bool preview)

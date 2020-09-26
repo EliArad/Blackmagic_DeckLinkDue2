@@ -32,6 +32,7 @@
 #include "D3D9.h"
 #include "DeckLinkAPI_h.h"
 #include "Common.h"
+#include "DSGraphUtils.h"
 
 class PreviewWindowDX9 : public IDeckLinkScreenPreviewCallback
 {
@@ -58,6 +59,7 @@ public:
 	bool SetVideoHandle(HWND p);
 
 	void SetPreviewVideo(bool preview);
+	void SetSourceFilter(CComPtr<ILiveSource> pFrameLiveSourceInterface);
 
 
 private:
@@ -79,7 +81,9 @@ private:
 
 
 	HRESULT GetDeckLinkVideoConversion(IDeckLinkVideoConversion **deckLinkVideoConversion);
+	CComPtr<ILiveSource> pFrameLiveSourceInterface;
 
 	bool m_previewVideo;
+	bool m_useSourceFilter;
 };
 

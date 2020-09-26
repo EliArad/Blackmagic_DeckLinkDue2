@@ -47,7 +47,7 @@ namespace DeckLinkCSCaptureLib
         const string path = @"C:\Program Files\Bauotech\Dll\DeckLinkDueApi.dll";
 
         [DllImport(path, CallingConvention = CallingConvention.StdCall)]
-        public static extern bool DL2_StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st);
+        public static extern int DL2_StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st);
 
         [DllImport(path, CallingConvention = CallingConvention.StdCall)]
         public static extern bool DL2_StopCapture();
@@ -72,6 +72,15 @@ namespace DeckLinkCSCaptureLib
         [DllImport(path, CallingConvention = CallingConvention.StdCall)]
         public static extern void DL2_SetPreviewVideo(bool preview);
 
+        [DllImport(path, CallingConvention = CallingConvention.StdCall)]
+        public static extern void DL2_Build_H264_TransportMux_Network();
+
+
+        public void Build_H264_TransportMux_Network()
+        {
+            DL2_Build_H264_TransportMux_Network();
+        }
+
         public void SetPreviewVideo(bool preview)
         {
             DL2_SetPreviewVideo(preview);
@@ -82,7 +91,7 @@ namespace DeckLinkCSCaptureLib
             DL2_SetWindowSize(x, y, width, height);
 
         }
-        public bool StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st)
+        public int StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st)
         {
             return DL2_StartCapture(device, st);
         }
