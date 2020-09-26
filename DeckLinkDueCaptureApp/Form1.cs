@@ -18,7 +18,7 @@ namespace DeckLinkDueCaptureApp
     {
 
 
-        DeckLinkCSCaptureApi m_dl2 = new DeckLinkCSCaptureApi();
+        DeckLinkCSCaptureApi[] m_dl2 = new DeckLinkCSCaptureApi[4];
         FrameCallback pFrameCallback;
          
 
@@ -26,24 +26,27 @@ namespace DeckLinkDueCaptureApp
         {
             InitializeComponent();
 
+            int id = 0;
+            m_dl2[id] = new DeckLinkCSCaptureApi(id);
+
             AppSettings.Instance.Load("DeckLinkDueCaptureApp.json");
 
             this.KeyPreview = true;
             Control.CheckForIllegalCrossThreadCalls = false;
             pFrameCallback = new FrameCallback(FrameCallbackData);
             //m_dl2.SetFrameCallback(pFrameCallback);
-            m_dl2.SetVideoHandle(panel1.Handle);
-            m_dl2.SetWindowSize(0, 0, panel1.Width, panel1.Height);
+            m_dl2[id].SetVideoHandle(panel1.Handle);
+            m_dl2[id].SetWindowSize(0, 0, panel1.Width, panel1.Height);
             if (AppSettings.Instance.Config.EnableMulticast == true)
             {
-                m_dl2.Build_H264_TransportMux_Network(AppSettings.Instance.Config.MulticastIpAddress,
+                m_dl2[id].Build_H264_TransportMux_Network(AppSettings.Instance.Config.MulticastIpAddress,
                                                       AppSettings.Instance.Config.MulticastPort,
                                                       AppSettings.Instance.Config.NicIpAddress, AppSettings.Instance.Config.bitrate,
                                                       AppSettings.Instance.Config.gopLength);
             }
 
             int res;
-            if ((res = m_dl2.StartCapture(AppSettings.Instance.Config.Device ,SURFACE_ENGINE.DX9)) < 0)
+            if ((res = m_dl2[id].StartCapture(AppSettings.Instance.Config.Device ,SURFACE_ENGINE.DX9)) < 0)
             {
                 MessageBox.Show("Failed to start capture: " + res);
             }
@@ -83,14 +86,14 @@ namespace DeckLinkDueCaptureApp
             if (e.KeyCode ==  Keys.F2)
             {
                 m_previewVideo = !m_previewVideo;
-                m_dl2.SetPreviewVideo(m_previewVideo);
+                m_dl2[0].SetPreviewVideo(m_previewVideo);
                 pictureBox1.Visible = !m_previewVideo;
             }
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            m_dl2.StopCapture();
+            m_dl2[0].StopCapture();
         }
     }
 }
