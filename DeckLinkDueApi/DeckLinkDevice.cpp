@@ -137,8 +137,8 @@ bool DeckLinkDevice::startCapture(BMDDisplayMode displayMode, IDeckLinkScreenPre
 
 	// Set the video input mode
 	if (m_deckLinkInput->EnableVideoInput(displayMode, 
-										  bmdFormat10BitYUV, 
-									      //bmdFormat8BitARGB,
+										  //bmdFormat10BitYUV, 
+										  bmdFormat8BitYUV,
 									      videoInputFlags) != S_OK)
 	{
 		if (m_errorListener)

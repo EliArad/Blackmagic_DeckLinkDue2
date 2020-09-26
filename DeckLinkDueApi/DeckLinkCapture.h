@@ -6,7 +6,8 @@
 #include "DeckLinkDevice.h"
 #include "ProfileCallback.h"
 #include "DeckLinkDeviceDiscovery.h"
-#include "PreviewWindow.h"
+#include "PreviewWindowGL.h"
+#include "PreviewWindowDX9.h"
 #include "Common.h"
 
 
@@ -18,10 +19,10 @@ public:
 	DeckLinkCapture();
 	~DeckLinkCapture();
 
-	bool StartCapture();
+	bool StartCapture(SURFACE_ENGINE st);
 	bool StopCapture();
 	bool SetFrameCallback(FrameCallback p);
-	void SetVideoHandle(HWND p);
+	bool SetVideoHandle(HWND p);
 	void SetWindowSize(int x, int y, int width, int height);
 
 
@@ -33,7 +34,8 @@ private:
 	BMDVideoConnection					m_selectedInputConnection;
 	CComPtr<DeckLinkDeviceDiscovery>	m_deckLinkDiscovery;
 	CComPtr<ProfileCallback>			m_profileCallback;
-	CComPtr<PreviewWindow>	m_previewWindow;
+	CComPtr<PreviewWindowGL>			m_previewWindowGL;
+	CComPtr<PreviewWindowDX9>			m_previewWindowDX9;
 
 	void AddDevice(CComPtr<IDeckLink>& deckLink);
 

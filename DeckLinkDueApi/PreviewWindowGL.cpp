@@ -1,9 +1,9 @@
 
 #include "stdafx.h"
 #include <gl/gl.h>
-#include "PreviewWindow.h"
+#include "PreviewWindowGL.h"
 
-PreviewWindow::PreviewWindow() : 
+PreviewWindowGL::PreviewWindowGL() :
 	m_refCount(1), 
 	m_deckLinkScreenPreviewHelper(nullptr), 
 	m_openGLctx(nullptr),
@@ -15,7 +15,7 @@ PreviewWindow::PreviewWindow() :
 	pFrameCallback = nullptr;
 }
 
-PreviewWindow::~PreviewWindow()
+PreviewWindowGL::~PreviewWindowGL()
 {
 
 	pFrameCallback = NULL;
@@ -25,10 +25,9 @@ PreviewWindow::~PreviewWindow()
 		m_openGLctx = nullptr;
 	}
 	 
-	 
 }
 
-bool PreviewWindow::init()
+bool PreviewWindowGL::init()
 {
 	  
 
@@ -39,7 +38,7 @@ bool PreviewWindow::init()
 	return true;
 } 
 
-bool PreviewWindow::InitOpenGL()
+bool PreviewWindowGL::InitOpenGL()
 {
 	PIXELFORMATDESCRIPTOR	pixelFormatDesc;
 	int						pixelFormat;
@@ -88,18 +87,20 @@ bool PreviewWindow::InitOpenGL()
 	return result;
 }
 
-void PreviewWindow::SetFrameCallback(FrameCallback p)
+void PreviewWindowGL::SetFrameCallback(FrameCallback p)
 {
 	pFrameCallback = p;
 }
 
-void PreviewWindow::SetVideoHandle(HWND p)
+bool PreviewWindowGL::SetVideoHandle(HWND p)
 {
 	pWindowHDC = GetDC(p);
 	InitOpenGL();
+
+	return true;
 }
 
-HRESULT 	PreviewWindow::QueryInterface(REFIID iid, LPVOID *ppv)
+HRESULT PreviewWindowGL::QueryInterface(REFIID iid, LPVOID *ppv)
 {
 	HRESULT result = E_NOINTERFACE;
 
@@ -127,12 +128,12 @@ HRESULT 	PreviewWindow::QueryInterface(REFIID iid, LPVOID *ppv)
 	return result;
 }
 
-ULONG PreviewWindow::AddRef()
+ULONG PreviewWindowGL::AddRef()
 {
 	return ++m_refCount;
 }
 
-ULONG		PreviewWindow::Release()
+ULONG PreviewWindowGL::Release()
 {
 	ULONG newRefValue = --m_refCount;
 	if (newRefValue == 0)
@@ -143,7 +144,7 @@ ULONG		PreviewWindow::Release()
 
 
 
-HRESULT	PreviewWindow::DrawFrame(IDeckLinkVideoFrame* theFrame)
+HRESULT	PreviewWindowGL::DrawFrame(IDeckLinkVideoFrame* theFrame)
 {
  
 	// First, pass the frame to the DeckLink screen preview helper
@@ -161,7 +162,7 @@ HRESULT	PreviewWindow::DrawFrame(IDeckLinkVideoFrame* theFrame)
 		void* videoPixels;
 		theFrame->GetBytes(&videoPixels);
 		 
-		pFrameCallback((uint8_t *)videoPixels, width, height);
+		pFrameCallback((uint8_t *)videoPixels, width, height, pif);
 	}
 	 
 
@@ -180,7 +181,7 @@ HRESULT	PreviewWindow::DrawFrame(IDeckLinkVideoFrame* theFrame)
 	return S_OK;
 }
 
-void PreviewWindow::SetWindowSize(int x, int y, int width, int height)
+void PreviewWindowGL::SetWindowSize(int x, int y, int width, int height)
 {
 	
 	glViewport(0, 0, width, height);

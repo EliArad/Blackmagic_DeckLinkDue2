@@ -9,12 +9,12 @@ DeckLinkCapture  *pCapture = NULL;
 
 FrameCallback pFrameCallback;
 
-DECLINK_API_EXPORTS bool  DL2_StartCapture()
+DECLINK_API_EXPORTS bool  DL2_StartCapture(SURFACE_ENGINE st)
 {
 	if (pCapture == NULL)
 		pCapture = new DeckLinkCapture();
 
-	return pCapture->StartCapture();
+	return pCapture->StartCapture(st);
 
 }
 DECLINK_API_EXPORTS bool DL2_StopCapture()

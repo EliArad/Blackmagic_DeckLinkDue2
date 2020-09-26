@@ -34,7 +34,7 @@ namespace DeckLinkDueCaptureApp
             m_dl2.SetVideoHandle(panel1.Handle);
             this.Resize += Form1_Resize;
             m_dl2.SetWindowSize(0, 0, panel1.Width, panel1.Height);
-            m_dl2.StartCapture();
+            m_dl2.StartCapture(SURFACE_ENGINE.DX9);
         }
 
         private void Form1_Resize(object sender, EventArgs e)
@@ -51,7 +51,7 @@ namespace DeckLinkDueCaptureApp
         [DllImport("kernel32.dll", EntryPoint = "CopyMemory", SetLastError = false)]
         public static extern void CopyMemory(IntPtr dest, IntPtr src, uint count);
 
-        void FrameCallbackData(IntPtr buffer, int width, int height)
+        void FrameCallbackData(IntPtr buffer, int width, int height, BMDPixelFormat pf)
         {
            
 

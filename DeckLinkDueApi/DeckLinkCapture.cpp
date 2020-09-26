@@ -57,7 +57,7 @@ extern IDeckLink* deckLink3;
 extern IDeckLink* deckLink4;
 
 
-bool DeckLinkCapture::StartCapture()
+bool DeckLinkCapture::StartCapture(SURFACE_ENGINE st)
 {
 
 
@@ -92,28 +92,56 @@ bool DeckLinkCapture::StartCapture()
 	if (profileManager)
 		profileManager->SetCallback(m_profileCallback);
 
-
-	m_previewWindow.Attach(new PreviewWindow());
-	if (m_previewWindow->init() == false)
+	if (st == SURFACE_ENGINE::OPENGL)
 	{
-		
+		m_previewWindowGL.Attach(new PreviewWindowGL());
+		if (m_previewWindowGL->init() == false)
+		{
+
+		}
+		m_previewWindowGL->SetFrameCallback(pFrameCallback);
+		m_previewWindowGL->SetVideoHandle(pVideoHandle);
+
+		if (newDevice)
+		{
+			if (newDevice->startCapture(BMDDisplayMode::bmdModeNTSC, m_previewWindowGL, true) == true)
+			{
+				return true;
+			}
+			else
+			{
+				m_selectedDevice->stopCapture();
+				return false;
+			}
+		}
+
+	}
+	else 
+	if (st == SURFACE_ENGINE::DX9)
+	{
+		m_previewWindowDX9.Attach(new PreviewWindowDX9());
+		if (m_previewWindowDX9->init() == false)
+		{
+
+		}
+		m_previewWindowDX9->SetFrameCallback(pFrameCallback);
+		m_previewWindowDX9->SetVideoHandle(pVideoHandle);
+
+		if (newDevice)
+		{
+			if (newDevice->startCapture(BMDDisplayMode::bmdModeNTSC, m_previewWindowDX9, true) == true)
+			{
+				return true;
+			}
+			else
+			{
+				m_selectedDevice->stopCapture();
+				return false;
+			}
+		}
 	}
 
-	m_previewWindow->SetFrameCallback(pFrameCallback);
-	m_previewWindow->SetVideoHandle(pVideoHandle);
-
-	if (newDevice)
-	{
-		if (newDevice->startCapture(BMDDisplayMode::bmdModeNTSC , m_previewWindow, true) == true)
-		{
-			return true;
-		}
-		else
-		{
-			m_selectedDevice->stopCapture();
-			return false;				
-		}
-	}
+	
 }
 
 bool DeckLinkCapture::StopCapture()
@@ -131,17 +159,19 @@ bool DeckLinkCapture::SetFrameCallback(FrameCallback p)
 	return true;
 }
 
-void DeckLinkCapture::SetVideoHandle(HWND p)
+bool DeckLinkCapture::SetVideoHandle(HWND p)
 {
 	pVideoHandle = p;
-	if (m_previewWindow != nullptr)
-		m_previewWindow->SetVideoHandle(p);
+	if (m_previewWindowGL != nullptr)
+		return m_previewWindowGL->SetVideoHandle(p);
+
+	return false;
 
 }
 void DeckLinkCapture::SetWindowSize(int x, int y, int width, int height)
 {
-	if (m_previewWindow != nullptr)
-		m_previewWindow->SetWindowSize(x, y, width, height);
+	if (m_previewWindowGL != nullptr)
+		m_previewWindowGL->SetWindowSize(x, y, width, height);
 }
 
 

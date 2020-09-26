@@ -6,11 +6,11 @@
 
 
 
-class PreviewWindow : public IDeckLinkScreenPreviewCallback
+class PreviewWindowGL : public IDeckLinkScreenPreviewCallback
 {
 public:
-	PreviewWindow();
-	virtual ~PreviewWindow();
+	PreviewWindowGL();
+	virtual ~PreviewWindowGL();
 
 	// Initialise members and OpenGL rendering context
 	bool						init();
@@ -28,7 +28,7 @@ public:
 
 	void SetWindowSize(int x, int y, int width, int height);
 	void SetFrameCallback(FrameCallback p);
-	void SetVideoHandle(HWND p);
+	bool SetVideoHandle(HWND p);
 
 	 
 	
