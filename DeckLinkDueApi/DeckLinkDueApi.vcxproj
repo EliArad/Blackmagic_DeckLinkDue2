@@ -92,7 +92,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <OutputFile>c:\program files\Bauotech\Dll\DeckLinkDueApi.dll</OutputFile>
-      <AdditionalDependencies>Strmiids.lib;d3d9.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Strmiids.lib;d3d9.lib;opengl32.lib;RpcRT4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -128,19 +128,16 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;DECKLINKDUEAPI_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;DECLINK_API_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <OutputFile>c:\program files\Bauotech\Dll\DeckLinkDueApi.dll</OutputFile>
-      <AdditionalDependencies>Strmiids.lib;d3d9.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Strmiids.lib;d3d9.lib;opengl32.lib;RpcRT4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bgra32VideoFrame.h" />
     <ClInclude Include="DeckLinkAPI_h.h" />
@@ -150,6 +147,16 @@
     <ClInclude Include="DeckLinkDueApi.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="DSGraphUtils.h" />
+    <ClInclude Include="ecommon.h" />
+    <ClInclude Include="edc.h" />
+    <ClInclude Include="ehlss.h" />
+    <ClInclude Include="ehlssink.h" />
+    <ClInclude Include="empegmux.h" />
+    <ClInclude Include="enwr.h" />
+    <ClInclude Include="enwsplus.h" />
+    <ClInclude Include="eqsdec.h" />
+    <ClInclude Include="ertspnws.h" />
+    <ClInclude Include="ModuleConfig_h.h" />
     <ClInclude Include="platform.h" />
     <ClInclude Include="PreviewWindowGL.h" />
     <ClInclude Include="PreviewWindowDX9.h" />
@@ -190,6 +197,14 @@
       </PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="DSGraphUtils.cpp" />
+    <ClCompile Include="ModuleConfig_i.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="ModuleConfig_p.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="platform.cpp" />
     <ClCompile Include="PreviewWindowGL.cpp" />
     <ClCompile Include="PreviewWindowDX9.cpp" />
@@ -203,6 +218,7 @@
   </ItemGroup>
   <ItemGroup>
     <Midl Include="..\..\..\..\include\DeckLinkAPI.idl" />
+    <Midl Include="ModuleConfig.idl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

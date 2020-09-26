@@ -10,6 +10,8 @@ DeckLinkCapture::DeckLinkCapture()
 	m_previewVideo = true;
 	pFrameCallback = nullptr;
 	CoInitializeEx(NULL, COINIT_MULTITHREADED);
+	m_enableDownGraph = 0;
+	m_ds = NULL;
 	
 }
 
@@ -143,8 +145,15 @@ int DeckLinkCapture::StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st)
 
 		if (newDevice)
 		{
+			if (m_ds != NULL && m_enableDownGraph > 0)
+			{
+				m_previewWindowDX9->SetSourceFilter(m_ds->GetLiveSourceInterface());
+			}
+
 			if (newDevice->startCapture(BMDDisplayMode::bmdModeNTSC, m_previewWindowGL, true) == true)
 			{
+				if ((res = RunGraph()) < 0)
+					return res;
 				return 1;
 			}
 			else
@@ -153,7 +162,6 @@ int DeckLinkCapture::StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st)
 				return -394;
 			}
 		}
-
 	}
 	else 
 	if (st == SURFACE_ENGINE::DX9)
@@ -172,8 +180,16 @@ int DeckLinkCapture::StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st)
 
 		if (newDevice)
 		{
+
+			if (m_ds != NULL && m_enableDownGraph > 0)
+			{
+				m_previewWindowDX9->SetSourceFilter(m_ds->GetLiveSourceInterface());
+			}
+
 			if (newDevice->startCapture(BMDDisplayMode::bmdModeNTSC, m_previewWindowDX9, true) == true)
 			{
+				if ((res = RunGraph()) < 0)
+					return res;
 				return 1;
 			}
 			else
@@ -183,8 +199,6 @@ int DeckLinkCapture::StartCapture(DECKLINK2_DEVICES device, SURFACE_ENGINE st)
 			}
 		}
 	}
-
-	
 }
 
 bool DeckLinkCapture::StopCapture()
@@ -234,17 +248,33 @@ void DeckLinkCapture::SetPreviewVideo(bool preview)
 
 }
 
-void DeckLinkCapture::Build_H264_TransportMux_Network()
+void DeckLinkCapture::Build_H264_TransportMux_Network(const WCHAR *IpAddress, const int port, const WCHAR *IpInterfaceAddress, unsigned int bitrate, int goplength)
 {
-	m_enableDownGraph = true;
+	m_enableDownGraph = 1;
+
+	wcscpy(m_multicastIpAddress, IpAddress);
+	m_multicastPort = port;
+	wcscpy(m_ipInterfaceAddress, IpInterfaceAddress);
+	
+	m_bitrate = bitrate;
+	m_goplength = goplength;
+
 }
 int DeckLinkCapture::BuildGraphs()
 {
-	if (m_enableDownGraph)
+	if (m_enableDownGraph > 0)
 	{
 		m_ds = new DSGraphUtils();
-		return m_ds->Build_H264_TransportMux_Network();
+		return m_ds->Build_H264_TransportMux_Network(m_multicastIpAddress, m_multicastPort, m_ipInterfaceAddress);
 	}
 	return 1;
 }
  
+int DeckLinkCapture::RunGraph()
+{
+	if (m_enableDownGraph > 0)
+	{
+		return m_ds->Play();
+	}
+	return 1;
+}

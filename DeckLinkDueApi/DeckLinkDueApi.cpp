@@ -67,12 +67,12 @@ DECLINK_API_EXPORTS void DL2_SetPreviewVideo(bool preview)
 }
 
 
-DECLINK_API_EXPORTS void DL2_Build_H264_TransportMux_Network()
+DECLINK_API_EXPORTS void DL2_Build_H264_TransportMux_Network(const WCHAR *IpAddress, const int port, const WCHAR *IpInterfaceAddress, unsigned int bitrate, int goplength)
 {
 
 	if (pCapture == NULL)
 		pCapture = new DeckLinkCapture();
 
-	pCapture->Build_H264_TransportMux_Network();
+	pCapture->Build_H264_TransportMux_Network(IpAddress, port, IpInterfaceAddress, bitrate, goplength);
 
 }

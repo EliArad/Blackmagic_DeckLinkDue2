@@ -73,12 +73,12 @@ namespace DeckLinkCSCaptureLib
         public static extern void DL2_SetPreviewVideo(bool preview);
 
         [DllImport(path, CallingConvention = CallingConvention.StdCall)]
-        public static extern void DL2_Build_H264_TransportMux_Network();
+        public static extern void DL2_Build_H264_TransportMux_Network([MarshalAs(UnmanagedType.LPWStr)]String IpAddress, int port, [MarshalAs(UnmanagedType.LPWStr)]String IpInterfaceAddress, uint bitrate, int goplength);
 
 
-        public void Build_H264_TransportMux_Network()
+        public void Build_H264_TransportMux_Network(string IpAddress, int port, string IpInterfaceAddress, uint bitrate, int goplength)
         {
-            DL2_Build_H264_TransportMux_Network();
+            DL2_Build_H264_TransportMux_Network(IpAddress, port, IpInterfaceAddress, bitrate, goplength);
         }
 
         public void SetPreviewVideo(bool preview)

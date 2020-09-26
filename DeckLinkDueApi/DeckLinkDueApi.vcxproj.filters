@@ -18,9 +18,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -61,6 +58,36 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DSGraphUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="edc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ehlss.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ehlssink.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="empegmux.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="enwr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="enwsplus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eqsdec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ertspnws.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleConfig_h.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ecommon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -110,10 +137,19 @@
     <ClCompile Include="DSGraphUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ModuleConfig_i.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleConfig_p.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="..\..\..\..\include\DeckLinkAPI.idl">
       <Filter>DeckLinkAPI</Filter>
+    </Midl>
+    <Midl Include="ModuleConfig.idl">
+      <Filter>Source Files</Filter>
     </Midl>
   </ItemGroup>
 </Project>

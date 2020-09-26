@@ -17,7 +17,7 @@ extern "C" {
 	DECLINK_API_EXPORTS void  DL2_SetVideoHandle(HWND p);
 	DECLINK_API_EXPORTS void  DL2_SetWindowSize(int x, int y, int width, int height);
 	DECLINK_API_EXPORTS void  DL2_SetPreviewVideo(bool preview);
-	DECLINK_API_EXPORTS void  DL2_Build_H264_TransportMux_Network();
+	DECLINK_API_EXPORTS void  DL2_Build_H264_TransportMux_Network(const WCHAR *IpAddress, const int port, const WCHAR *IpInterfaceAddress, unsigned int bitrate, int goplength);
 
 #ifdef __cplusplus
 }

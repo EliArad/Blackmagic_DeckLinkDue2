@@ -165,9 +165,9 @@ ULONG PreviewWindowDX9::Release()
 }
 
 void PreviewWindowDX9::SetSourceFilter(CComPtr<ILiveSource> p)
-{
-	m_useSourceFilter = true;
+{	
 	pFrameLiveSourceInterface = p;
+	m_useSourceFilter = true;
 }
 
 void PreviewWindowDX9::SetPreviewVideo(bool preview)
@@ -183,25 +183,35 @@ HRESULT	PreviewWindowDX9::DrawFrame(IDeckLinkVideoFrame* theFrame)
 	// Set current frame in preview helper
 	HRESULT hr = m_deckLinkScreenPreviewHelper->SetFrame(theFrame);
 
+	
+	int width = theFrame->GetWidth();
+	int height = theFrame->GetHeight();
+
+	if (width != 1920)
+		return S_OK;
+
+	BMDPixelFormat pif;
+	void* videoPixels;
+
+	if (pFrameCallback != nullptr || m_useSourceFilter == true)
+	{
+
+		pif = theFrame->GetPixelFormat();
+
+		if (bgra32Frame == NULL)
+			bgra32Frame = new Bgra32VideoFrame(width, height, theFrame->GetFlags());
+
+		deckLinkFrameConverter->ConvertFrame(theFrame, bgra32Frame);
+		bgra32Frame->GetBytes(&videoPixels);
+	}
+
+	if (m_useSourceFilter == true)
+	{
+		pFrameLiveSourceInterface->AddFrame((BYTE *)videoPixels, RGBA_HD_SIZE);
+	}
 
 	if (pFrameCallback != nullptr)
 	{ 
-		int width = theFrame->GetWidth();
-		int height = theFrame->GetHeight();
-
-		if (width != 1920)
-			return S_OK;
-
-		BMDPixelFormat pif = theFrame->GetPixelFormat();
-
-		void* videoPixels;
-		
-		bgra32Frame = new Bgra32VideoFrame(width, height, theFrame->GetFlags());
-
-		deckLinkFrameConverter->ConvertFrame(theFrame, bgra32Frame);
-		
-		bgra32Frame->GetBytes(&videoPixels);
-
 		pFrameCallback((uint8_t *)videoPixels, width, height, pif);
 	}
 

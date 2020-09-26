@@ -25,7 +25,7 @@ public:
 	bool SetVideoHandle(HWND p);
 	void SetWindowSize(int x, int y, int width, int height);
 	void SetPreviewVideo(bool preview);
-	void Build_H264_TransportMux_Network();
+	void Build_H264_TransportMux_Network(const WCHAR *IpAddress, const int port, const WCHAR *IpInterfaceAddress, unsigned int bitrate, int goplength);
 
 
 private:
@@ -41,11 +41,17 @@ private:
 
 	void AddDevice(CComPtr<IDeckLink>& deckLink);
 	int BuildGraphs();
+	int RunGraph();
 
 	bool m_previewVideo;
 	int m_enableDownGraph;
 
 	DSGraphUtils  *m_ds;
+	WCHAR m_multicastIpAddress[100];
+	int m_multicastPort;
+	WCHAR m_ipInterfaceAddress[100];
 
+	int m_bitrate;
+	int m_goplength;
 };
 
