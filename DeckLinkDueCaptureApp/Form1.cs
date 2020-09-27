@@ -34,7 +34,7 @@ namespace DeckLinkDueCaptureApp
             this.KeyPreview = true;
             Control.CheckForIllegalCrossThreadCalls = false;
             pFrameCallback = new FrameCallback(FrameCallbackData);
-            //m_dl2.SetFrameCallback(pFrameCallback);
+            //m_dl2[id].SetFrameCallback(pFrameCallback);
             m_dl2[id].SetVideoHandle(panel1.Handle);
             m_dl2[id].SetWindowSize(0, 0, panel1.Width, panel1.Height);
             if (AppSettings.Instance.Config.EnableMulticast == true)

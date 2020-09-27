@@ -223,7 +223,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Midl Include="..\..\..\..\include\DeckLinkAPI.idl" />
+    <Midl Include="include\DeckLinkAPI.idl" />
     <Midl Include="ModuleConfig.idl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

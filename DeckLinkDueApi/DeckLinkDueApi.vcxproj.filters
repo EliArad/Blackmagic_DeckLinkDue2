@@ -163,11 +163,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Midl Include="..\..\..\..\include\DeckLinkAPI.idl">
-      <Filter>DeckLinkAPI</Filter>
-    </Midl>
     <Midl Include="ModuleConfig.idl">
       <Filter>Source Files</Filter>
+    </Midl>
+    <Midl Include="include\DeckLinkAPI.idl">
+      <Filter>DeckLinkAPI</Filter>
     </Midl>
   </ItemGroup>
 </Project>
