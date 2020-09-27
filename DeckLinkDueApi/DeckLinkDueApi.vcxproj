@@ -213,7 +213,6 @@
     <ClCompile Include="PlaybackVideoFrame.cpp" />
     <ClCompile Include="PreviewWindowGL.cpp" />
     <ClCompile Include="PreviewWindowDX9.cpp" />
-    <ClCompile Include="ProfileCallback.cpp" />
     <ClCompile Include="SourceReader.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

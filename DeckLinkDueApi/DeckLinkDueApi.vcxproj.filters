@@ -119,9 +119,6 @@
     <ClCompile Include="DeckLinkDeviceDiscovery.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ProfileCallback.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DeckLinkCapture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
