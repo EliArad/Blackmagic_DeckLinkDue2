@@ -12,13 +12,12 @@ namespace DeckLinkDueCaptureApp
     public class AppConfig
     {
         public DECKLINK2_DEVICES Device;
-        public bool EnableMulticast;
+        public int EnableDownGraph;
         public string MulticastIpAddress;
         public int MulticastPort;
         public string NicIpAddress;
         public uint bitrate;
         public int gopLength;
-        
     }
      
 
@@ -44,7 +43,7 @@ namespace DeckLinkDueCaptureApp
  
         public void Default()
         {
-            m_config.EnableMulticast = false;
+            m_config.EnableDownGraph = 0;
             m_config.MulticastIpAddress = "234.5.5.5";
             m_config.MulticastPort = 6000;
             m_config.NicIpAddress = "10.0.0.10";

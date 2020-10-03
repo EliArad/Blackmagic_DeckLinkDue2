@@ -64,6 +64,7 @@ public:
 	void								queryDisplayModes(QueryDisplayModeFunc func);
 	void								setErrorListener(const DeviceErrorOccuredFunc& func) { m_errorListener = func; }
 	void								onVideoFormatChange(const VideoFormatChangedCallback& callback) { m_videoFormatChangedCallback = callback; }
+	HRESULT							    VideoInputFormatChanged2(BMDVideoInputFormatChangedEvents notificationEvents, IDeckLinkDisplayMode *newMode, BMDDetectedVideoInputFormatFlags detectedSignalFlags);
 	void								onVideoFrameArrival(const VideoFrameArrivedCallback& callback) { m_videoFrameArrivedCallback = callback; }
 
 	// IUnknown interface
@@ -91,4 +92,6 @@ private:
 	DeviceErrorOccuredFunc				m_errorListener;
 	VideoFormatChangedCallback			m_videoFormatChangedCallback;
 	VideoFrameArrivedCallback			m_videoFrameArrivedCallback;
+
+	BMDPixelFormat	m_pixelFormat;
 };

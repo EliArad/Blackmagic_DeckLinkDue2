@@ -260,12 +260,30 @@ void DeckLinkCapture::Build_H264_TransportMux_Network(const WCHAR *IpAddress, co
 	m_goplength = goplength;
 
 }
+
+void DeckLinkCapture::Build_H264QS_TransportMux_Network(const WCHAR *IpAddress, const int port, const WCHAR *IpInterfaceAddress, unsigned int bitrate, int goplength)
+{
+	m_enableDownGraph = 2;
+
+	wcscpy(m_multicastIpAddress, IpAddress);
+	m_multicastPort = port;
+	wcscpy(m_ipInterfaceAddress, IpInterfaceAddress);
+
+	m_bitrate = bitrate;
+	m_goplength = goplength;
+
+}
+
 int DeckLinkCapture::BuildGraphs()
 {
 	if (m_enableDownGraph > 0)
 	{
 		m_ds = new DSGraphUtils();
-		return m_ds->Build_H264_TransportMux_Network(m_multicastIpAddress, m_multicastPort, m_ipInterfaceAddress, m_bitrate , m_goplength);
+		if (m_enableDownGraph == 1)
+			return m_ds->Build_H264_TransportMux_Network(m_multicastIpAddress, m_multicastPort, m_ipInterfaceAddress, m_bitrate , m_goplength);
+
+		if (m_enableDownGraph == 2)
+			return m_ds->Build_H264QS_TransportMux_Network(m_multicastIpAddress, m_multicastPort, m_ipInterfaceAddress, m_bitrate, m_goplength);
 	}
 	return 1;
 }

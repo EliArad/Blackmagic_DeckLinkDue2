@@ -135,10 +135,10 @@ bool DeckLinkDevice::startCapture(BMDDisplayMode displayMode, IDeckLinkScreenPre
 	// Set capture callback
 	m_deckLinkInput->SetCallback(this);
 
+	m_pixelFormat = bmdFormat8BitYUV;
 	// Set the video input mode
-	if (m_deckLinkInput->EnableVideoInput(displayMode, 
-										  //bmdFormat10BitYUV, 
-										  bmdFormat8BitYUV,
+	if (m_deckLinkInput->EnableVideoInput(displayMode, 										   
+										  m_pixelFormat,
 									      videoInputFlags) != S_OK)
 	{
 		if (m_errorListener)
@@ -199,11 +199,66 @@ void DeckLinkDevice::queryDisplayModes(QueryDisplayModeFunc func)
 	}
 }
 
+
+HRESULT DeckLinkDevice::VideoInputFormatChanged2(BMDVideoInputFormatChangedEvents notificationEvents, IDeckLinkDisplayMode *newMode, BMDDetectedVideoInputFormatFlags detectedSignalFlags)
+{
+	BMDPixelFormat	pixelFormat = m_pixelFormat;
+
+	// Restart capture with the new video mode if told to
+	if (!m_applyDetectedInputMode)
+		goto bail;
+
+	// Restart capture with the new video mode if told to
+	if (notificationEvents & bmdVideoInputColorspaceChanged)
+	{
+		if (detectedSignalFlags & bmdDetectedVideoInputRGB444)
+			pixelFormat = bmdFormat8BitBGRA;
+		else if (detectedSignalFlags & bmdDetectedVideoInputYCbCr422)
+			pixelFormat = bmdFormat8BitYUV;
+		else
+			goto bail;
+	}
+
+	// Restart streams if either dispay mode or colorspace has changed
+	if ((notificationEvents & bmdVideoInputDisplayModeChanged) || (pixelFormat != m_pixelFormat))
+	{
+		// Stop and flush the capture
+		m_deckLinkInput->StopStreams();
+		m_deckLinkInput->FlushStreams();
+
+		// Set the video input mode
+		if (m_deckLinkInput->EnableVideoInput(newMode->GetDisplayMode(), pixelFormat, bmdVideoInputEnableFormatDetection) != S_OK)
+		{
+			 
+			goto bail;
+		}
+
+		// Start the capture
+		if (m_deckLinkInput->StartStreams() != S_OK)
+		{
+			 
+			goto bail;
+		}
+
+		m_pixelFormat = pixelFormat;
+	}
+
+	// Send event with detected display mode
+	if (notificationEvents & (bmdVideoInputDisplayModeChanged | bmdVideoInputFieldDominanceChanged))
+		if (m_videoFormatChangedCallback != nullptr)
+			m_videoFormatChangedCallback(newMode->GetDisplayMode());
+
+bail:
+	return S_OK;
+}
+
 HRESULT DeckLinkDevice::VideoInputFormatChanged(BMDVideoInputFormatChangedEvents notificationEvents, IDeckLinkDisplayMode *newMode, BMDDetectedVideoInputFormatFlags detectedSignalFlags)
 {	
 	BMDPixelFormat pixelFormat;
 
  
+	return VideoInputFormatChanged2(notificationEvents, newMode, detectedSignalFlags);
+
 
 	// Restart capture with the new video mode if told to
 	if (!m_applyDetectedInputMode)

@@ -54,6 +54,7 @@ public:
 
 	void Close();
 	HRESULT Build_H264_TransportMux_Network(const WCHAR *IpAddress, const int port, const WCHAR *IpInterfaceAddress, unsigned int bitrate, int goplength);
+	HRESULT Build_H264QS_TransportMux_Network(const WCHAR *IpAddress, const int port, const WCHAR *IpInterfaceAddress, unsigned int bitrate, int goplength);
 	HRESULT Play(int tries = 1);
 	HRESULT Pause();
 	HRESULT Stop();
@@ -85,6 +86,7 @@ private:
 	CComPtr<IBaseFilter> pVideoEncoder;
 	CComPtr<IBaseFilter> pElecardMpegMux;
 	CComPtr<IBaseFilter> pRemoteClientSender;
+	CComPtr<IBaseFilter> pColorSpaceConverter2;
 	
 	
 	
@@ -105,7 +107,9 @@ private:
 
 	HRESULT SetNotifyEvent(HWND handle);
 	HRESULT AddElecardAVCEncoder(unsigned int bitrate, int goplength);
+	HRESULT AddElecardAVCQSEncoder(unsigned int bitrate, int goplength);
 	HRESULT SetElecardEncoderParameter(int bitrate, int maxBitrate, int maxGopLength);
+	HRESULT AddElecardColorSpaceConverter2();
 	HRESULT ActivateFilter(IBaseFilter *filter);
 	HRESULT GetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin, int num = 0);
 	IPin *GetPin(IBaseFilter *Filter, CString PinName, PIN_DIRECTION  direction);

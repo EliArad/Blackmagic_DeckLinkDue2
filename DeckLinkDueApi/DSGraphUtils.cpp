@@ -3,6 +3,9 @@
 #include "ecommon.h"
 #include "ModuleConfig_h.h"
 #include "empegmux.h"
+#include "eqsenc.h"
+#include "eavcenc.h"
+#include "ecsc2.h"
 
 
 
@@ -688,4 +691,193 @@ HRESULT DSGraphUtils::Stop()
 	}
 
 	return hr;
+}
+
+
+
+HRESULT DSGraphUtils::Build_H264QS_TransportMux_Network(const WCHAR *IpAddress, const int port, const WCHAR *IpInterfaceAddress, unsigned int bitrate, int goplength)
+{
+	HRESULT hr = S_OK;
+
+	if ((hr = InitializeGraph()) != S_OK)
+		return hr;
+
+	hr = AddFrameRowSourceFilter();
+	if (hr != S_OK)
+		return hr;
+	 
+	PIN_INFO pininfo;
+	CComPtr<IPin> pFrameSourceOutPin;
+	GetPin(pFrameSourceFilter, PIN_DIRECTION::PINDIR_OUTPUT, &pFrameSourceOutPin);
+	hr = pFrameSourceOutPin->QueryPinInfo(&pininfo);
+	pininfo.pFilter->Release();
+	if (FAILED(hr))
+	{
+		return -19132;
+	}
+	 
+
+	hr = AddElecardColorSpaceConverter2();
+	if (hr != S_OK)
+		return hr;
+	 
+	CComPtr<IPin> pSpaceConverterInPin;
+	GetPin(pColorSpaceConverter2, PIN_DIRECTION::PINDIR_INPUT, &pSpaceConverterInPin);
+	hr = pSpaceConverterInPin->QueryPinInfo(&pininfo);
+	pininfo.pFilter->Release();
+	if (FAILED(hr))
+	{
+		return -193376;
+	}
+
+
+	hr = pGraph2->Connect(pFrameSourceOutPin, pSpaceConverterInPin);
+	if (FAILED(hr))
+	{
+		return -192123;
+	}
+
+
+	CComPtr<IPin> pSpaceConverterOutPin;
+	GetPin(pColorSpaceConverter2, PIN_DIRECTION::PINDIR_OUTPUT, &pSpaceConverterOutPin);
+	hr = pSpaceConverterOutPin->QueryPinInfo(&pininfo);
+	pininfo.pFilter->Release();
+	if (FAILED(hr))
+	{
+		return -193376;
+	}
+	
+
+	hr = AddElecardAVCQSEncoder(bitrate, goplength);
+	if (hr != S_OK)
+		return hr;
+
+	 
+	CComPtr<IPin> pEncoderInPin;
+	GetPin(pVideoEncoder, PIN_DIRECTION::PINDIR_INPUT, &pEncoderInPin);
+	hr = pEncoderInPin->QueryPinInfo(&pininfo);
+	pininfo.pFilter->Release();
+	if (FAILED(hr))
+	{
+		return -19332;
+	}
+	 
+
+	hr = pGraph2->Connect(pSpaceConverterOutPin, pEncoderInPin);
+	if (FAILED(hr))
+	{
+		return -193322;
+	}
+
+
+	CComPtr<IPin> pEncoderOutPin;
+	GetPin(pVideoEncoder, PIN_DIRECTION::PINDIR_OUTPUT, &pEncoderOutPin);
+	hr = pEncoderOutPin->QueryPinInfo(&pininfo);
+	pininfo.pFilter->Release();
+	if (FAILED(hr))
+	{
+		return -11318;
+	}
+
+	
+	hr = AddElecardMux();
+
+
+	CComPtr<IPin> pMuxInPin;
+	CComPtr<IPin> pMuxOutPin;
+	GetPin(pElecardMpegMux, PIN_DIRECTION::PINDIR_INPUT, &pMuxInPin);
+	hr = pMuxInPin->QueryPinInfo(&pininfo);
+	pininfo.pFilter->Release();
+	if (FAILED(hr))
+	{
+		return -1547767;
+	}
+
+	hr = pGraph2->Connect(pEncoderOutPin, pMuxInPin);
+	if (FAILED(hr))
+	{
+		return -12322;
+	}
+	 
+
+	GetPin(pElecardMpegMux, PIN_DIRECTION::PINDIR_OUTPUT, &pMuxOutPin);
+	hr = pMuxOutPin->QueryPinInfo(&pininfo);
+	pininfo.pFilter->Release();
+	if (FAILED(hr))
+	{
+		return -171137;
+	}
+
+	 
+
+	hr = AddMulticastNetwordSender(IpAddress, port, IpInterfaceAddress);
+	if (FAILED(hr))
+	{
+		return -153112;
+	}
+
+
+	CComPtr<IPin> pSenderInPin;
+	GetPin(pRemoteClientSender, PIN_DIRECTION::PINDIR_INPUT, &pSenderInPin);
+	hr = pSenderInPin->QueryPinInfo(&pininfo);
+	pininfo.pFilter->Release();
+	if (FAILED(hr))
+	{
+		return -14447;
+	}
+
+	hr = pGraph2->Connect(pMuxOutPin, pSenderInPin);
+	if (FAILED(hr))
+	{
+		return -10023251;
+	}
+
+
+	m_state = STATE_STOPPED;
+
+	return hr;
+}
+
+ 
+HRESULT DSGraphUtils::AddElecardAVCQSEncoder(unsigned int bitrate, int goplength)
+{
+
+	HRESULT hr = AddFilterByCLSID(m_pGraph, CLSID_EQSVideoEncoder_AVC, &pVideoEncoder, L"Elecard AVC Video Encoder");
+	if (FAILED(hr))
+	{
+		return -19025;
+	}
+
+	ActivateFilter(pVideoEncoder);
+
+	if ((hr = SetElecardEncoderParameter(bitrate, 0, goplength)) != S_OK)
+	{
+		return hr;
+	}
+
+	return hr;
+}
+
+HRESULT DSGraphUtils::AddElecardColorSpaceConverter2()
+{
+
+	HRESULT hr = AddFilterByCLSID(m_pGraph, CLSID_ECSC2, &pColorSpaceConverter2, L"Elecard Color Space Converter 2");
+	if (FAILED(hr))
+	{
+		return -1925;
+	}
+	 
+	CComQIPtr<IModuleConfig> mc_spaceConverter(pColorSpaceConverter2);
+	CComVariant varEncBitrate;
+	varEncBitrate.vt = VT_INT;
+	varEncBitrate.intVal = ECSC::SubTypes::eNV12;
+	hr = mc_spaceConverter->SetValue(&CSC_FIX_OUTPUT_MEDIA_TYPE, &varEncBitrate);
+	if (FAILED(hr))
+	{
+		return -19254;
+	}
+	 
+
+	return hr;
+
 }

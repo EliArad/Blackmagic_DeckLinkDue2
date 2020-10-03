@@ -37,12 +37,26 @@ namespace DeckLinkDueCaptureApp
             //m_dl2[id].SetFrameCallback(pFrameCallback);
             m_dl2[id].SetVideoHandle(panel1.Handle);
             m_dl2[id].SetWindowSize(0, 0, panel1.Width, panel1.Height);
-            if (AppSettings.Instance.Config.EnableMulticast == true)
+             
+            if (AppSettings.Instance.Config.EnableDownGraph > 0)
             {
-                m_dl2[id].Build_H264_TransportMux_Network(AppSettings.Instance.Config.MulticastIpAddress,
-                                                      AppSettings.Instance.Config.MulticastPort,
-                                                      AppSettings.Instance.Config.NicIpAddress, AppSettings.Instance.Config.bitrate,
-                                                      AppSettings.Instance.Config.gopLength);
+                if (AppSettings.Instance.Config.EnableDownGraph == 1)
+                {
+                    m_dl2[id].Build_H264_TransportMux_Network(AppSettings.Instance.Config.MulticastIpAddress,
+                                                          AppSettings.Instance.Config.MulticastPort,
+                                                          AppSettings.Instance.Config.NicIpAddress, AppSettings.Instance.Config.bitrate,
+                                                          AppSettings.Instance.Config.gopLength);
+                }
+
+                if (AppSettings.Instance.Config.EnableDownGraph == 2)
+                {
+
+                    m_dl2[id].Build_H264QS_TransportMux_Network(AppSettings.Instance.Config.MulticastIpAddress,
+                                                         AppSettings.Instance.Config.MulticastPort,
+                                                         AppSettings.Instance.Config.NicIpAddress, AppSettings.Instance.Config.bitrate,
+                                                         AppSettings.Instance.Config.gopLength);
+                }
+
             }
 
             int res;

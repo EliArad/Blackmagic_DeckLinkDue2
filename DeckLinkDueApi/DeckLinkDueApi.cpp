@@ -76,3 +76,13 @@ DECLINK_API_EXPORTS void DL2_Build_H264_TransportMux_Network(int id, const WCHAR
 	pCapture[id]->Build_H264_TransportMux_Network(IpAddress, port, IpInterfaceAddress, bitrate, goplength);
 
 }
+
+DECLINK_API_EXPORTS void DL2_Build_H264QS_TransportMux_Network(int id, const WCHAR *IpAddress, const int port, const WCHAR *IpInterfaceAddress, unsigned int bitrate, int goplength)
+{
+
+	if (pCapture[id] == NULL)
+		pCapture[id] = new DeckLinkCapture();
+
+	pCapture[id]->Build_H264QS_TransportMux_Network(IpAddress, port, IpInterfaceAddress, bitrate, goplength);
+
+}

@@ -26,7 +26,7 @@ public:
 	void SetWindowSize(int x, int y, int width, int height);
 	void SetPreviewVideo(bool preview);
 	void Build_H264_TransportMux_Network(const WCHAR *IpAddress, const int port, const WCHAR *IpInterfaceAddress, unsigned int bitrate, int goplength);
-
+	void Build_H264QS_TransportMux_Network(const WCHAR *IpAddress, const int port, const WCHAR *IpInterfaceAddress, unsigned int bitrate, int goplength);
 
 private:
 

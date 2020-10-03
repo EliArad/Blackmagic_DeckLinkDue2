@@ -90,10 +90,18 @@ namespace DeckLinkCSCaptureLib
         [DllImport(path, CallingConvention = CallingConvention.StdCall)]
         public static extern void DL2_Build_H264_TransportMux_Network(int id, [MarshalAs(UnmanagedType.LPWStr)]String IpAddress, int port, [MarshalAs(UnmanagedType.LPWStr)]String IpInterfaceAddress, uint bitrate, int goplength);
 
+        [DllImport(path, CallingConvention = CallingConvention.StdCall)]
+        public static extern void DL2_Build_H264QS_TransportMux_Network(int id, [MarshalAs(UnmanagedType.LPWStr)]String IpAddress, int port, [MarshalAs(UnmanagedType.LPWStr)]String IpInterfaceAddress, uint bitrate, int goplength);
+
 
         public void Build_H264_TransportMux_Network(string IpAddress, int port, string IpInterfaceAddress, uint bitrate = 1500000, int goplength = 15)
         {
             DL2_Build_H264_TransportMux_Network(m_id,IpAddress, port, IpInterfaceAddress, bitrate, goplength);
+        }
+
+        public void Build_H264QS_TransportMux_Network(string IpAddress, int port, string IpInterfaceAddress, uint bitrate = 1500000, int goplength = 15)
+        {
+            DL2_Build_H264QS_TransportMux_Network(m_id, IpAddress, port, IpInterfaceAddress, bitrate, goplength);
         }
 
         public void SetPreviewVideo(bool preview)
